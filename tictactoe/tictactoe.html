@@ -26,73 +26,33 @@
             border-collapse: collapse;
             border: 1px solid black;
             text-align: center;
-			
+
         }
     </style>
 
 </head>
 <body>
 
-    <div class="d-flex justify-content-center mt-5">
-        <table>
-            <tr>
-                <td id="1"></td>
-                <td id="2"></td>
-                <td id="3"></td>
-            </tr>
-            <tr>
-                <td id="4"></td>
-                <td id="5"></td>
-                <td id="6"></td>
-            </tr>
-            <tr>
-                <td id="7"></td>
-                <td id="8"></td>
-                <td id="9"></td>
-            </tr>
+<div class="d-flex justify-content-center mt-5">
+    <table>
+        <tr>
+            <td id="1"></td>
+            <td id="2"></td>
+            <td id="3"></td>
+        </tr>
+        <tr>
+            <td id="4"></td>
+            <td id="5"></td>
+            <td id="6"></td>
+        </tr>
+        <tr>
+            <td id="7"></td>
+            <td id="8"></td>
+            <td id="9"></td>
+        </tr>
 
-        </table>
-    </div>
-
-
-
-
-
-    <script>
-
-        let player1 = "X";
-        let player2 = "O";
-
-        let currentPlayer = player1;
-
-
-        //click on td
-        $('table td').click(function () {
-            var $this = $(this);
-            if ($($this).hasClass("clicked")) {
-            }
-            else {
-                if (currentPlayer == player1) {
-                    //$this.text("X");
-                    $($this).prepend($('<i />', { 'class': 'fas fa-times fa-9x' }));
-                    currentPlayer = player2;
-                    $($this).addClass("clicked");
-
-                }
-                else {
-                    //$this.text("O");
-                    $($this).prepend($('<i />', { 'class': 'far fa-circle fa-7x' }));
-                    currentPlayer = player1;
-                    $($this).addClass("clicked");
-                }
-            }
-        });
-
-
-
-
-
-    </script>
+    </table>
+</div>
 </body>
 </html>
 
