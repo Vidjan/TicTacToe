@@ -1,47 +1,52 @@
 $(() => {
     let player1 = "X";
     let player2 = "O";
-
     let currentPlayer = player1;
 
+    let board = Array.from(Array(3), () => Array(3).fill(null))
 
+    //add x or o to a specified position on the board
+    let addToBoard = (player, x, y, board) => {
+        board[x][y] = player;
+    }
     //click on td
-    $('table td').click(function () {
-        var $this = $(this);
-        if ($($this).hasClass("clicked")) {
-        } else {
-            if (currentPlayer == player1) {
-                //$this.text("X");
-                $($this).prepend($('<i />', {'class': 'fas fa-times fa-9x'}));
-                currentPlayer = player2;
-                $($this).addClass("clicked");
+    $('td').click(function () {
+        let x = this.cellIndex;
+        let y = this.parentNode.rowIndex;
 
+        if (!$(this).hasClass("clicked")) {
+            if (currentPlayer === player1) {
+                //$this.text("X");
+                $(this).prepend($('<i />', {'class': 'fas fa-times fa-9x'}));
+                currentPlayer = player2;
+                $(this).addClass("clicked");
+                addToBoard(player1, x, y, board);
             } else {
                 //$this.text("O");
-                $($this).prepend($('<i />', {'class': 'far fa-circle fa-7x'}));
+                $(this).prepend($('<i />', {'class': 'far fa-circle fa-7x'}));
                 currentPlayer = player1;
-                $($this).addClass("clicked");
+                $(this).addClass("clicked");
+                addToBoard(player2, x, y, board);
             }
         }
+
+        $("h1").text(checkWinner(board));
+
+
     });
 
-    var board = [['X', 'O', 'X'], ['O', 'X', 'O'], ['X', 'O', 'O']];
-    var players = ['X', 'O'];
-    var available = [];
-
-
     function all3(a, b, c) {
-        return ((a != '') && (a == b) && (b == c));
+        return ((a != null) && (a === b) && (b === c));
     }
 
-    function checkWinner() {
+    function checkWinner(board) {
         let winner = null;
         //horizontal check
         for (let i = 0; i < 3; i++) {
             if (all3(board[i][0], board[i][1], board[i][2])) {
                 winner = board[i][0];
             }
-            if (winner != null) {
+            if ((winner != null)) {
                 return winner;
             }
         }
@@ -51,38 +56,28 @@ $(() => {
                 winner = board[0][i];
             }
             if (winner != null) {
-                return winner;
+                return winner + " wins";
             }
         }
         //diagonal check
         if (all3(board[0][0], board[1][1], board[2][2])) {
             winner = board[0][0];
+            return winner + " wins";
         }
         if (all3(board[2][0], board[1][1], board[0][2])) {
             winner = board[2][0];
+            return winner + " wins";
         }
+        console.log(board);
         //check if there is no winner, but also if there are no more available moves - a tie
-        if ((winner == null) && (available.length == 0)) {
-            return 'tie';
+        if ((winner == null) && (board.includes(null))) {
+            return "tie";
         } else {
-            return winner;
+            return "";
         }
     }
 
-    function showWinner() {
-        let result = checkWinner();
-        if (result != null) {
-            let result2;
-            if (result == 'tie') {
-                result2.innerHTML('Tie!');
-            } else {
-                result2.innerHTML =$(result) +" wins!";
-            }
-        } else {
-            nextTurn();
-        }
-    }
-
+    //minimax
     function bestMove() {
         // AI to make its turn
         let bestScore = -Infinity;
@@ -96,13 +91,11 @@ $(() => {
                     board[i][j] = '';
                     if (score > bestScore) {
                         bestScore = score;
-                        move = { i, j };
+                        move = {i, j};
                     }
                 }
             }
         }
-        board[move.i][move.j] = ai;
-        currentPlayer = human;
     }
 
     let scores = {
@@ -122,7 +115,7 @@ $(() => {
             for (let i = 0; i < 3; i++) {
                 for (let j = 0; j < 3; j++) {
                     // Is the spot available?
-                    if (board[i][j] == '') {
+                    if (board[i][j] === '') {
                         board[i][j] = ai;
                         let score = script(board, depth + 1, false);
                         board[i][j] = '';
@@ -139,7 +132,7 @@ $(() => {
                     if (board[i][j] == '') {
                         board[i][j] = human;
                         let score = script(board, depth + 1, true);
-                        board[i][j] = '';
+                        board[i][j] = 'tie';
                         bestScore = min(score, bestScore);
                     }
                 }
@@ -147,7 +140,6 @@ $(() => {
             return bestScore;
         }
     }
-
 });
 
 
