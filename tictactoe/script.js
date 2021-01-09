@@ -30,7 +30,10 @@ $(() => {
             }
         }
 
-        $("h1").text(checkWinner(board));
+        //unbinds click if the theres a winner
+        let winner = checkWinner(board);
+        if (winner === 'X' || winner === 'O') $("td").off("click");
+        $("h1").text(winner);
 
 
     });
@@ -56,19 +59,18 @@ $(() => {
                 winner = board[0][i];
             }
             if (winner != null) {
-                return winner + " wins";
+                return winner;
             }
         }
         //diagonal check
         if (all3(board[0][0], board[1][1], board[2][2])) {
             winner = board[0][0];
-            return winner + " wins";
+            return winner;
         }
         if (all3(board[2][0], board[1][1], board[0][2])) {
             winner = board[2][0];
-            return winner + " wins";
+            return winner;
         }
-        console.log(board);
         //check if there is no winner, but also if there are no more available moves - a tie
         if ((winner == null) && (board.includes(null))) {
             return "tie";
