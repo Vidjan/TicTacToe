@@ -16,9 +16,9 @@ $(() => {
         row++;
         cel++;
         if (symbol === "X") {
-            $("table tr:nth-child(" + row + ") td:nth-child(" + cel + ")").addClass("clicked").prepend($('<i />', { 'class': 'fas fa-times fa-9x' }));
+            $("table tr:nth-child(" + row + ") td:nth-child(" + cel + ")").addClass("clicked").prepend($('<i />', {'class': 'fas fa-times fa-9x'}));
         } else if (symbol === "O") {
-            $("table tr:nth-child(" + row + ") td:nth-child(" + cel + ")").addClass("clicked").prepend($('<i />', { 'class': 'far fa-circle fa-7x' }));
+            $("table tr:nth-child(" + row + ") td:nth-child(" + cel + ")").addClass("clicked").prepend($('<i />', {'class': 'far fa-circle fa-7x'}));
         }
     }
 
@@ -106,7 +106,7 @@ $(() => {
                     board[i][j] = '';
                     if (score > bestScore) {
                         bestScore = score;
-                        move = { i, j };
+                        move = {i, j};
                     }
                 }
             }
@@ -152,46 +152,24 @@ $(() => {
         }
     }
 
-    let board = [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', '']
-    ];
-
-    //todo X or O select
-
-    let computer = "O";
-    let human = "X";
-
-    let timesClicked = 0;
-    $('#togBtn').click(function () {
-        if (timesClicked % 2 == 0) {
-            human = "O";
-            computer = "X";
-            timesClicked++;
-        }
-        else {
-            human = "X";
-            computer = "O";
-            timesClicked++;
-        }
-    });
-
-
     //computer decides the move
     let computersMove = () => {
         let bm = bestMove(board, human, computer);
         draw(bm.i, bm.j, computer);
         addToBoard(bm.i, bm.j, computer, board);
-        unbind();
-        humanMove();
+
+        let winner = checkWinner();
+        if (winner === null)
+            humanMove();
+        else if (winner === "tie")
+            $("#winnerText").text("Its a tie!");
+        else
+            $("#winnerText").text(winner + " wins!");
     }
 
     //human plays a move
     let humanMove = () => {
-        console.log(board)
         $("td").click(function () {
-            $('#togBtn').off("click");
             if (!$(this).hasClass("clicked")) {
                 let x = this.cellIndex;
                 let y = this.parentNode.rowIndex;
@@ -199,17 +177,60 @@ $(() => {
                 draw(y, x, human);
                 addToBoard(y, x, human, board);
                 unbind();
-                computersMove()
+
+                let winner = checkWinner();
+                if (winner === null)
+                    computersMove();
+                else if (winner === "tie")
+                    $("#winnerText").text("Its a tie!");
+                else
+                    $("#winnerText").text(winner + " wins!");
             }
         });
     }
 
-    //game
-    if (computer === "X") {
-        computersMove();
-    } else {
-        weights.X = -10
-        weights.O = 10
-        humanMove();
+    //choose symbol logic
+    let timesClicked = 0;
+    $('#togBtn').click(function () {
+        if (timesClicked % 2 === 0) {
+            human = "O";
+            computer = "X";
+            timesClicked++;
+        } else {
+            human = "X";
+            computer = "O";
+            timesClicked++;
+        }
+    });
+
+    //game start
+    let startGame = () => {
+        //sets the js and html board to blank
+        board = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', '']
+        ];
+        $("td").html("").removeClass("clicked");;
+
+        if (computer === "X") {
+            computersMove();
+        } else {
+            weights.X = -10
+            weights.O = 10
+            humanMove();
+        }
     }
+
+
+    let board = [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
+    ];
+
+    let computer = "O";
+    let human = "X";
+
+    $("#startButton").click(() => startGame());
 });
