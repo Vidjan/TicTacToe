@@ -16,9 +16,9 @@ $(() => {
         row++;
         cel++;
         if (symbol === "X") {
-            $("table tr:nth-child(" + row + ") td:nth-child(" + cel + ")").addClass("clicked").prepend($('<i />', {'class': 'fas fa-times fa-9x'}));
+            $("table tr:nth-child(" + row + ") td:nth-child(" + cel + ")").addClass("clicked").prepend($('<i />', { 'class': 'fas fa-times fa-9x' }));
         } else if (symbol === "O") {
-            $("table tr:nth-child(" + row + ") td:nth-child(" + cel + ")").addClass("clicked").prepend($('<i />', {'class': 'far fa-circle fa-7x'}));
+            $("table tr:nth-child(" + row + ") td:nth-child(" + cel + ")").addClass("clicked").prepend($('<i />', { 'class': 'far fa-circle fa-7x' }));
         }
     }
 
@@ -106,7 +106,7 @@ $(() => {
                     board[i][j] = '';
                     if (score > bestScore) {
                         bestScore = score;
-                        move = {i, j};
+                        move = { i, j };
                     }
                 }
             }
@@ -160,8 +160,23 @@ $(() => {
 
     //todo X or O select
 
-    let computer = "X";
-    let human = "O";
+    let computer = "O";
+    let human = "X";
+
+    let timesClicked = 0;
+    $('#togBtn').click(function () {
+        if (timesClicked % 2 == 0) {
+            human = "O";
+            computer = "X";
+            timesClicked++;
+        }
+        else {
+            human = "X";
+            computer = "O";
+            timesClicked++;
+        }
+    });
+
 
     //computer decides the move
     let computersMove = () => {
@@ -176,6 +191,7 @@ $(() => {
     let humanMove = () => {
         console.log(board)
         $("td").click(function () {
+            $('#togBtn').off("click");
             if (!$(this).hasClass("clicked")) {
                 let x = this.cellIndex;
                 let y = this.parentNode.rowIndex;
