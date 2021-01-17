@@ -181,12 +181,6 @@ $(() => {
         });
     }
 
-    //choose symbol logic
-    let timesClicked = 0;
-    $('#togBtn').click( () => {
-        timesClicked++;
-    });
-
     //game start
     let startGame = () => {
         //sets the js, html board to blank and clears the winner text
@@ -206,7 +200,6 @@ $(() => {
             human = "O";
             computer = "X";
         }
-        console.log("human"  )
         if (computer === "X"){
             weights.X = 1;
             weights.O = -1;
@@ -217,6 +210,12 @@ $(() => {
             humanMove();
         }
     }
+
+    //choose symbol logic
+    let timesClicked = 0;
+    $('#togBtn').click( () => {
+        timesClicked++;
+    });
 
     //weights for the minimax algorithm
     let weights = {
