@@ -86,13 +86,6 @@ $(() => {
         }
     }
 
-    //minimax fox tic tac toe
-    let weights = {
-        X: 1,
-        O: -1,
-        tie: 0
-    };
-
     function bestMove() {
         // AI to make its turn
         let bestScore = -Infinity;
@@ -113,7 +106,6 @@ $(() => {
         }
         return move;
     }
-
 
     function minimax(board, depth, isMaximizing) {
         let result = checkWinner(board);
@@ -191,38 +183,49 @@ $(() => {
 
     //choose symbol logic
     let timesClicked = 0;
-    $('#togBtn').click(function () {
-        if (timesClicked % 2 === 0) {
-            human = "O";
-            computer = "X";
-            timesClicked++;
-        } else {
-            human = "X";
-            computer = "O";
-            timesClicked++;
-        }
+    $('#togBtn').click( () => {
+        timesClicked++;
     });
 
     //game start
     let startGame = () => {
-        //sets the js and html board to blank
+        //sets the js, html board to blank and clears the winner text
         board = [
             ['', '', ''],
             ['', '', ''],
             ['', '', '']
         ];
-        $("td").html("").removeClass("clicked");;
+        $("td").html("").removeClass("clicked");
+        $("#winnerText").text("");
 
-        if (computer === "X") {
+        //sets appropriate symbols as the player decided with the toggle button
+        if (timesClicked % 2 === 0) {
+            human = "X";
+            computer = "O";
+        } else {
+            human = "O";
+            computer = "X";
+        }
+        console.log("human"  )
+        if (computer === "X"){
+            weights.X = 1;
+            weights.O = -1;
             computersMove();
         } else {
-            weights.X = -10
-            weights.O = 10
+            weights.X = -1;
+            weights.O = 1;
             humanMove();
         }
     }
 
+    //weights for the minimax algorithm
+    let weights = {
+        X: 1,
+        O: -1,
+        tie: 0
+    };
 
+    //js board to keep track of the symbol locations
     let board = [
         ['', '', ''],
         ['', '', ''],
