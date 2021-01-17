@@ -200,7 +200,7 @@ $(() => {
             human = "O";
             computer = "X";
         }
-        if (computer === "X"){
+        if (computer === "X") {
             weights.X = 1;
             weights.O = -1;
             computersMove();
@@ -213,7 +213,7 @@ $(() => {
 
     //choose symbol logic
     let timesClicked = 0;
-    $('#togBtn').click( () => {
+    $('#togBtn').click(() => {
         timesClicked++;
     });
 
